@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  emqx:
+    container_name: emqx
+    image: emqx/emqx:latest
+    ports:
+      - 18083:18083
+      - 1883:1883
+    network_mode: host
+    volumes:
+      - ./acl.conf:/opt/emqx/etc/acl.conf
+  mqtt_consumer:
+    build: .
+    image: mqtt-consumer:latest
+    container_name: mqtt_consumer
+    env_file: .env
+    depends_on:
+      - emqx
